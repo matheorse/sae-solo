@@ -74,10 +74,10 @@ def valid_add_declinaison_telephone():
 
 @admin_declinaison_telephone.route('/admin/declinaison_telephone/edit', methods=['GET'])
 def edit_declinaison_telephone():
-    id_declinaison_telephone = request.args.get('id_declinaison_telephone')
     mycursor = get_db().cursor()
-    sql = '''SELECT * FROM declinaison d
-             JOIN telephone t ON d.telephone_id = t.id_telephone
+    id_declinaison_telephone = request.args.get('id_declinaison_telephone')
+    sql = '''SELECT * FROM declinaison
+             JOIN telephone ON declinaison.telephone_id = telephone.id_telephone
              WHERE id_declinaison_telephone = %s;'''
     mycursor.execute(sql, (id_declinaison_telephone,))
     declinaison_telephone = mycursor.fetchone()
@@ -92,34 +92,43 @@ def edit_declinaison_telephone():
     mycursor.execute(sql, (id_declinaison_telephone,))
     d_taille_uniq = mycursor.fetchone()
     if d_taille_uniq is not None:
+        tailles = tailles[1:]
         taille_id = d_taille_uniq.get('taille_id')
         if taille_id == 1:
             d_taille_uniq = 1
     sql = '''SELECT couleur_id, id_declinaison_telephone FROM declinaison
-             WHERE id_declinaison_telephone = %s'''
+                     WHERE id_declinaison_telephone = %s'''
     mycursor.execute(sql, (id_declinaison_telephone,))
     d_couleur_uniq = mycursor.fetchone()
     if d_couleur_uniq is not None:
+        couleurs = couleurs[1:]
         couleur_id = d_couleur_uniq.get('couleur_id')
         if couleur_id == 1:
             d_couleur_uniq = 1
-    return render_template('admin/telephone/edit_declinaison.html', tailles=tailles, couleurs=couleurs, declinaison_telephone=declinaison_telephone, d_taille_uniq=d_taille_uniq, d_couleur_uniq=d_couleur_uniq)
+    return render_template('admin/telephone/edit_declinaison.html'
+                           , tailles=tailles
+                           , couleurs=couleurs
+                           , declinaison_telephone=declinaison_telephone
+                           , d_taille_uniq=d_taille_uniq
+                           , d_couleur_uniq=d_couleur_uniq
+                           )
 
 
 @admin_declinaison_telephone.route('/admin/declinaison_telephone/edit', methods=['POST'])
 def valid_edit_declinaison_telephone():
+    id_declinaison_telephone = request.form.get('id_declinaison_telephone','')
+    id_telephone = request.form.get('id_telephone','')
+    stock = request.form.get('stock','')
+    taille_id = request.form.get('id_taille','')
+    couleur_id = request.form.get('id_couleur')
     mycursor = get_db().cursor()
-    id_declinaison_telephone = request.form.get('id_declinaison_telephone', '')
-    id_telephone = request.form.get('id_telephone', '')
-    stock_declinaison = request.form.get('stock', '')
-    taille_id = request.form.get('taille', '')
-    couleur_id = request.form.get('couleur', '')
-    tuple_update = (stock_declinaison, id_telephone, taille_id, couleur_id, id_declinaison_telephone)
+    tuple_update = (stock, id_telephone, taille_id, couleur_id, id_declinaison_telephone)
     sql = '''UPDATE declinaison SET stock = %s, telephone_id = %s, taille_id = %s, couleur_id = %s
-             WHERE id_declinaison_telephone = %s'''
+                 WHERE id_declinaison_telephone = %s'''
     mycursor.execute(sql, tuple_update)
     get_db().commit()
-    message = u'declinaison_telephone modifié , id:' + str(id_declinaison_telephone) + '- stock :' + str(stock_declinaison) + ' - taille_id:' + str(taille_id) + ' - couleur_id:' + str(couleur_id)
+    message = u'declinaison_velo modifié , id:' + str(id_declinaison_telephone) + '- stock :' + str(
+        stock) + ' - taille_id:' + str(taille_id) + ' - couleur_id:' + str(couleur_id)
     flash(message, 'alert-success')
     return redirect('/admin/telephone/edit?id_telephone=' + str(id_telephone))
 

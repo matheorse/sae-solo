@@ -6,7 +6,7 @@
 {% block body %}
     <h2>Modifier un téléphone</h2>
     <div class="row mt-5">
-        {% if telephone %}
+        {% if telephone is not none and telephone.image_telephone is not none %}
             <img class="card-img-top rounded mx-4 d-block" style="width: 200px; height: 200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename='images/' + telephone.image_telephone) }}" alt="Image de {{ telephone.libelle_telephone }}">
         {% endif %}
         <div class="w-50">
@@ -81,14 +81,14 @@
                                 {{ declinaison.stock }}
                             </td>
                             <td style="display: flex">
-                                <a href="/admin/declinaison_telephone/delete?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}&id_telephone={{ telephone.id_telephone }}">
-                                    <button class="btn btn-danger mx-1">
-                                        Supprimer
+                                <a class="img-fluid" href="/admin/declinaison_telephone/delete?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}&amp;id_telephone={{ declinaison.telephone_id }}">
+                                    <button class="btn btn-primary mx-1">
+                                        supprimer
                                     </button>
                                 </a>
-                                <a class="img-fluid" href="/admin/declinaison_telephone/edit?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}&id_telephone={{ telephone.id_telephone }}">
+                                <a class="img-fluid" href="/admin/declinaison_telephone/edit?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}">
                                     <button class="btn btn-primary mx-1">
-                                        Éditer
+                                        editer
                                     </button>
                                 </a>
                             </td>

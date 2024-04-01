@@ -155,14 +155,15 @@ def edit_telephone():
     modeles = mycursor.fetchall()
 
     sql_declinaisons = '''
-    SELECT d.couleur_id, d.taille_id, d.stock, c.libelle_couleur, t.libelle_taille
+    SELECT *
     FROM declinaison d
-    LEFT JOIN couleur c ON c.id_couleur = d.couleur_id
-    LEFT JOIN taille t ON t.id_taille = d.taille_id
+    LEFT JOIN couleur c ON d.couleur_id = c.id_couleur
+    LEFT JOIN taille t ON d.taille_id = t.id_taille
     WHERE d.telephone_id = %s
     '''
     mycursor.execute(sql_declinaisons, (id_telephone,))
     declinaisons = mycursor.fetchall()
+    print(declinaisons)
 
     sql_count_couleurs = '''SELECT COUNT(*) as nb_couleurs FROM declinaison WHERE telephone_id = %s'''
     mycursor.execute(sql_count_couleurs, (id_telephone,))
@@ -213,27 +214,15 @@ def valid_edit_telephone():
     stockage_telephone = %s, prix_telephone = %s, autonomie_telephone = %s, image_telephone = %s, modele_id = %s
     WHERE id_telephone = %s
     '''
-    mycursor.execute(sql_update_telephone, (
-        nom, stock, poids, taille, stockage, prix, autonomie, filename, modele_id, id_telephone))
+    mycursor.execute(sql_update_telephone, (nom, poids, stockage, prix, autonomie, filename, modele_id, id_telephone))
     get_db().commit()
-
-    telephone_info = {
-        'Nom': nom,
-        'Stock': stock,
-        'Poids': poids + ' g',
-        'Taille': taille + ' pouces',
-        'Stockage': stockage + ' Go',
-        'Prix': prix + ' €',
-        'Autonomie': autonomie + ' heures',
-        'Image': filename,
-        'Modèle': modele_id,
-    }
-
-    message = 'Téléphone modifié avec succès - Informations:\n'
-    for key, value in telephone_info.items():
-        message += f'{key}: {value} | '
-
+    print(nom, prix, modele_id, filename, id_telephone)
+    get_db().commit()
+    if filename is None:
+        filename = ''
+    message = u'telephone modifié , nom: ' + nom + ' - modele_id: ' + modele_id + ' - prix: ' + prix + ' - image: ' + filename
     flash(message, 'alert-success')
+    return redirect('/admin/velo/show')
 
     return redirect('/admin/telephone/show')
 
