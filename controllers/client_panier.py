@@ -13,10 +13,6 @@ def client_panier_add():
     quantite_panier = request.form.get('quantite')
     id_declinaison_telephone = request.form.get('id_declinaison_telephone')
 
-    if quantite_panier == '0':
-        flash(u'La quantité doit être supérieure à 0', 'alert-warning')
-        return redirect('/client/telephone/show')
-
     if id_declinaison_telephone is None:
         sql = '''SELECT * 
                  FROM declinaison d
@@ -54,7 +50,6 @@ def client_panier_add():
                  WHERE id_declinaison_telephone = %s"""
         mycursor.execute(sql, (quantite_panier, id_declinaison_telephone))
 
-
     elif len(declinaisons) == 0:
         flash('Problème de nombre de déclinaisons détecté.', 'alert-danger')
         return redirect('/client/telephone/show')
@@ -64,6 +59,7 @@ def client_panier_add():
                  WHERE id_telephone = %s'''
         mycursor.execute(sql, (id_telephone,))
         telephone = mycursor.fetchone()
+
         return render_template('client/boutique/declinaison_telephone.html'
                                , declinaisons=declinaisons
                                , telephone=telephone)

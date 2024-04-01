@@ -45,7 +45,6 @@ def client_telephone_show():
 
     id_client = session['id_user']
 
-
     sql = "SELECT * FROM modele"
     mycursor.execute(sql)
     modele = mycursor.fetchall()
@@ -58,7 +57,6 @@ def client_telephone_show():
     else:
         prix_total = None
     """
-
 
     sql = "SELECT telephone.libelle_telephone, telephone.prix_telephone, ligne_panier.quantite, telephone.id_telephone FROM ligne_panier JOIN telephone ON ligne_panier.declinaison_id = telephone.id_telephone WHERE ligne_panier.utilisateur_id = %s"
     mycursor.execute(sql, (id_client,))
