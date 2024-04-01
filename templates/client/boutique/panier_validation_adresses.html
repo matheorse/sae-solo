@@ -1,72 +1,73 @@
 {% extends "client/layout_client.html" %}
-
 {% block body %}
     <div class="container">
         <div class="row align-self-right">
             {% include('client/boutique/_panier.html') %}
         </div>
         <div class="row">
-            <br>
-            <a href="/client/coordonnee/show" class="btn btn-secondary mt-5 col-2"> ajouter une adresse</a>
-            <form action="/client/commande/add" method="post">
-                {% if adresses %}
-                    <br>
-                    <h4>Choisissez l'adresse de livraison</h4>
-                    <select name="adresse_livraison" required class="form-select">
-                        <option value="">Sélectionner l'adresse de livraison</option>
-                        {% for adresse in adresses %}
-                            <option value="{{ adresse.id_adresse }}"
-                                    {% if adresse_favori != None and adresse_favori.id_adresse == adresse.id_adresse %}
-                                    selected
-                                    {% endif %}
-                            >{{ adresse.nom_adresse }} ({{ adresse.rue_adresse }})
-                                {{ adresse.code_postal }} - {{ adresse.ville }}
-                                {% if adresse_favori != None and adresse_favori.id_adresse == adresse.id_adresse %}
-                                    (f)
-                                {% endif %}
-                            </option>
+             <br>
+            <a href="/client/coordonnee/show" class="btn btn-secondary mt-5 col-2"> ajouter une adresse (livrable 2)</a>
+            <form action="/client/commande/add"  style="display: inline-block;"  method="post" >
+            {% if adresses | length > 0 %}
+                <br>
+                    <h4>Choisisser l'adresse de livraison</h4>
+                    <select  name="id_adresse_livraison" name="adresse_livraison" required  class="form-select">
+                        <option value="">Sélectionner l'adresse de facturation</option>
+                        {% for adresse  in adresses %}
+
+                             <option value="{{ adresse.id_adresse }}"
+                             {% if id_adresse_fav != 0 and id_adresse_fav == adresse.id_adresse %}
+                                 selected
+                             {% endif %}
+
+                             >{{ adresse.nom }} ({{ adresse.code_postal }})
+                                 {{ adresse.ville }} - {{ adresse.rue }}
+                             {% if id_adresse_fav != 0 and id_adresse_fav == adresse.id_adresse %}
+                                 (f)
+                             {% endif %}
+
+                             </option>
                         {% endfor %}
                     </select>
                     <br>
-                    <h4>Choisissez l'adresse de facturation</h4>
-                    Adresse de facturation identique <input type="checkbox" name="adresse_identique" value="adresse_identique" id="adresse_identique" onclick="identique()">
-                    <br>
-                    <div id="adresse_facturation_container" style="display:block;">
-                        <select id="id_adresse_facturation" name="adresse_facturation" required class="form-select">
-                            <option value="">Sélectionner l'adresse de facturation</option>
-                            {% for adresse in adresses %}
-                                <option value="{{ adresse.id_adresse }}">{{ adresse.nom_adresse }} ({{ adresse.rue_adresse }}) {{ adresse.code_postal }} - {{ adresse.ville }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-primary">Passer ma commande</button>
-                {% else %}
-                    <br>
-                    Il faut une adresse de livraison et de facturation pour valider la commande.
+
+                    <h4>Choisisser l'adresse de facturation</h4>
+                    adresse de facturation identique <input type="checkbox" name="adresse_identique" value="adresse_identique" id="adresse_identique" onclick="identique()">
+                <br>
+                    <select  id="id_adresse_facturation" name="id_adresse_facturation" required class="form-select">
+                        <option value="">Sélectionner l'adresse de livraison</option>
+                        {% for adresse  in adresses %}
+                             <option value="{{ adresse.id_adresse }}"
+                             {% if id_adresse_fav != 0 and id_adresse_fav == adresse.id_adresse %}
+                                 selected
+                             {% endif %}
+                             >{{ adresse.nom }} ({{ adresse.code_postal }})
+                                 {{ adresse.ville }} - {{ adresse.rue }}
+                             </option>
+                        {% endfor %}
+                    </select>
+                {%  else %}
+                    Il faut une adresse de livraison et de facturation pour valider la commande (livrable 2)
+                    <a href="/client/coordonnee/show"  class="btn btn-primary">Ajouter une adresse (livrable 2)</a>
                 {% endif %}
                 <br>
+                <button class="btn btn-primary mt-4" > Passer ma commande </button>
             </form>
         </div>
     </div>
 
     <script>
-        function identique() {
-            var checkbox = document.getElementById('adresse_identique');
-            var selectLivraison = document.querySelector('select[name="adresse_livraison"]');
-            var selectFacturation = document.querySelector('select[name="adresse_facturation"]');
-            var containerFacturation = document.getElementById("adresse_facturation_container");
-
-            if (checkbox.checked == true) {
-                // Copie l'adresse de livraison dans l'adresse de facturation
-                selectFacturation.value = selectLivraison.value;
-                // Cache le sélecteur d'adresse de facturation
-                containerFacturation.style.display = 'none';
-            } else {
-                // Affiche le sélecteur d'adresse de facturation
-                containerFacturation.style.display = 'block';
-            }
+    function identique(){
+	if(document.getElementById('adresse_identique').checked == true)
+        {
+        document.getElementById("id_adresse_facturation").style.display = 'none';
+        document.getElementById("id_adresse_facturation").required = false;
         }
+        else
+        {
+        document.getElementById("id_adresse_facturation").style.display = 'block';
+        document.getElementById("id_adresse_facturation").required = true;
+        }
+    };
     </script>
-
 {% endblock %}

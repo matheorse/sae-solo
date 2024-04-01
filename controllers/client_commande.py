@@ -13,12 +13,13 @@ client_commande = Blueprint('client_commande', __name__, template_folder='templa
 def client_commande_valide():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql = '''SELECT *, prix_telephone FROM ligne_panier
-             LEFT JOIN declinaison d ON ligne_panier.declinaison_id = d.id_declinaison_telephone
-             LEFT JOIN telephone t ON d.telephone_id = t.id_telephone
-             LEFT JOIN couleur c ON d.couleur_id = c.id_couleur
-             LEFT JOIN taille t ON d.taille_id= t.id_taille
-             WHERE utilisateur_id=%s'''
+    sql = '''SELECT *, t.prix_telephone 
+                FROM ligne_panier
+                LEFT JOIN declinaison d ON ligne_panier.declinaison_id = d.id_declinaison_telephone
+                LEFT JOIN telephone t ON d.telephone_id = t.id_telephone
+                LEFT JOIN couleur c ON d.couleur_id = c.id_couleur
+                LEFT JOIN taille ta ON d.taille_id = ta.id_taille
+                WHERE utilisateur_id=%s'''
     mycursor.execute(sql, (id_client,))
     telephones_panier = mycursor.fetchall()
 
@@ -38,7 +39,8 @@ def client_commande_valide():
 def client_commande_add():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql = '''SELECT *, t.prix_telephone FROM ligne_panier lp
+    sql = '''SELECT *, t.prix_telephone, d.id_declinaison_telephone AS telephone_declinaison_id, lp.quantite AS quantite_panier
+             FROM ligne_panier lp
              JOIN declinaison d ON lp.declinaison_id = d.id_declinaison_telephone
              JOIN telephone t ON d.telephone_id = t.id_telephone
              WHERE utilisateur_id=%s;'''

@@ -116,9 +116,9 @@ INSERT INTO etat(libelle_etat) VALUES
 ('En attente de validation');
 
 INSERT INTO couleur(libelle_couleur, code_couleur) VALUES
-('couleur unique','#000000'),
+('couleur unique',''),
 ('Noir', '#000000'),
-('Blanc','#FFFFFF'),
+('Blanc','#000000'),
 ('Jaune','#FFDE59'),
 ('Rouge','#E4080A'),
 ('Cyan','#5DE2E7'),
@@ -167,10 +167,15 @@ INSERT INTO declinaison (stock, image, prix_declinaison, telephone_id, taille_id
 (10,'titaneface.jpg', 1299.99, 1, 1, 1),
 (10,'Ace15Max_gris_face.jpg', 1399.99, 2, 2, 1),
 (10,'Ace15Max_gris_face.jpg', 1299.99, 2, 3, 1),
-(0,'Ace15noirface.jpg', 1399.99, 3, 2, 2),
+(0,'Ace15noirface.jpg', 1399.99, 3, 2, 6),
+(10,'Ace15noirface.jpg', 1399.99, 4, 1, 5),
 (10,'Ace15noirface.jpg', 1399.99, 4, 1, 2),
-(10,'Ace15noirface.jpg', 1399.99, 4, 1, 3),
-(0,'Ace15noirface.jpg', 1149.99, 3, 3, 3);
+(0,'Ace15noirface.jpg', 1149.99, 3, 3, 8),
+(10,'SErougeface.jpg', 1299.99, 14, 3, 4),
+(0,'SErougeface.jpg', 1399.99, 15, 2, 6),
+(10,'Ace13vertface.jpg', 1399.99, 10, 1, 5),
+(10,'Ace13vertface.jpg', 1399.99, 11, 1, 2),
+(0,'OnePronoirface.jpg', 1149.99, 16, 3, 8);
 
 -- Insertion de données pour la table `commande`
 INSERT INTO commande (date_achat_commande, utilisateur_id, etat_id, adresse_livraison, adresse_facturation) VALUES

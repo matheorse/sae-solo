@@ -14,7 +14,7 @@ def client_panier_add():
     id_declinaison_telephone = request.form.get('id_declinaison_telephone')
 
     if id_declinaison_telephone is None:
-        sql = '''SELECT * 
+        sql = '''SELECT *
                  FROM declinaison d
                  LEFT JOIN telephone t ON d.telephone_id = t.id_telephone
                  LEFT JOIN couleur ON d.couleur_id = couleur.id_couleur
