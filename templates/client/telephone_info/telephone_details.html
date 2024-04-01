@@ -1,0 +1,193 @@
+{% extends "client/layout_client.html" %}
+{% block stylesheets%}
+    {{ super() }}
+     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/star_rating.css') }}" >
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    <div class="text-center card w-auto">
+
+         <h2 class="card-title">
+             <span style="color: #0b2e13">{{ telephone.libelle_telephone }}</span> - &nbsp;{{ telephone.prix_telephone }} €
+         </h2>
+
+        <div class="card-body">
+
+            {%  if telephone.image is not none %}
+                <img style="width:400px;height:auto"  src="{{ url_for('static', filename = 'images/')}}{{ telephone.image_telephone }}"  alt="image  de {{ telephone.libelle_telephone }}" >
+            {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images_asset/noimage.png')}}"  alt="image  de {{ telephone.libelle_telephone }}" >
+            {% endif %}
+
+
+           {% if commandes_telephones.nb_commandes_telephone is defined and commandes_telephones.nb_commandes_telephone > 0 %}
+                     <br>Vous avez commandé <strong>{{ commandes_telephones.nb_commandes_telephone }} </strong>fois  ce produit
+           {% endif %}
+
+        </div>
+
+        <div class="card-footer text-left"><h6>Description : {{ telephone.description }}</h6></div>
+
+    </div>
+
+                    <div class="product-actions">
+                        {% for declinaison in telephone.declinaisons %}
+                            {% if declinaison.stock > 0 %}
+                                <form action="/client/panier/add" method="post">
+                                    <button class="add-to-cart-btn">Ajouter au panier</button>
+                                    <input type="hidden" name="id_telephone" value="{{ declinaison.id_declinaison }}">
+                                    <input class="inputPanier" type="number" name="quantite" min="1" value="1" required>
+                                </form>
+
+                                <p class="stock-info">Stock restant : <b>{{ declinaison.stock }}</b></p>
+                            {% else %}
+                                <br>
+                                <p class="stock-info">⏳ Modèle momentanément indisponible</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+    <hr>
+
+    <div class="row">
+
+    <div class="col-12">
+        {% if telephone.moyenne_notes is not defined or  telephone.nb_notes is not defined or  telephone.moyenne_notes == None %}
+            <strong>Pas de note.</strong>
+        {% else %}
+            <strong>Note moyenne du téléphone : {{ "%.1f"|format(telephone.moyenne_notes) }} ⭐</strong> : Produit noté {{ telephone.nb_notes }} fois.
+        {% endif %}
+    </div>
+
+
+        {% if peut_commenter %}
+            <div class="col-12">
+                {% if note is defined and note is number %}
+
+                    <form  action="/client/note/edit"   method="post" class="row">
+                    <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                    <div class="col-md-3">
+                        <label for="input_note" class="d-flex justify-content-end align-items-end pe-3">Modifier votre note sur ce produit : </label>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" class="form-control col-md-2" value="{{ note }}" >
+                    </div>
+                     <div class="col-md-2">
+                         <button class="btn btn-primary" > Modifier votre note </button>
+                     </div>
+                    </form>
+
+                    <form action="/client/commentaire/delete" method="post">
+                      <input type="hidden" name="id_telephone" value="{{ telephone.id }}">
+                      <input type="hidden" name="date_publication" value="{{ commentaire.date_publication }}">
+                      <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                {% else %}
+                    <form  action="/client/note/add"   method="post" class="row">
+                    <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                    <div class="col-md-3">
+                        <label for="input_note" class="d-flex justify-content-end align-items-end pe-3">Mettre une note sur ce produit : </label>
+                    </div>
+
+                    <div class="col-md-1">
+                        <input type="number" name="note" id="input_note" step="0.1" min="0" max="5" class="form-control col-md-2" value="" >
+                    </div>
+
+                     <div class="col-md-2">
+                        <button class="btn btn-primary" >Mettre une note </button></div>
+                    </form>
+                {% endif %}
+            </div>
+        {% else %}
+            <small>(Seul les clients ayant acheté ce téléphone peuvent le noter)</small>
+        {% endif %}
+    </div>
+
+    <br>
+    <hr>
+
+  <div class="row" style="background-color: #faf1d7">
+
+      <div class="col-12">
+      {% if nb_commentaires.nb_commentaires_total is not defined or nb_commentaires.nb_commentaires_utilisateur is not defined %}
+         <strong>NB comment not defined</strong>
+                {% else %}
+            <strong>Vos commentaire(s) : {{ nb_commentaires.nb_commentaires_utilisateur }} / 3 </strong><br>
+            <strong>Nombre de commentaire(s) total :  {{nb_commentaires.nb_commentaires_total }}</strong>
+        {% endif %}
+      </div>
+
+        {% if peut_commenter %}
+          <form  action="/client/commentaire/add"   method="post">
+                <div class="col">
+                  <label for="input_commentaire" class="form-label">Mettez un commentaire sur cet telephone : </label>
+                     <textarea name="commentaire" class="form-control" aria-label="Votre commentaire" id="input_commentaire"  placeholder="Votre commentaire"></textarea>
+                </div>
+              <input type="hidden" name="action" value="add_commentaire">
+              <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                <form  action="/client/comment/add"  style="display: inline-block;"  method="post" >
+                        <button class="btn btn-primary mt-2" > Ajouter un commentaire </button>
+                </form>
+            </form>
+        {% else %}
+            <small>(Seul les clients ayant acheté ce produit peuvent le commenter ou nombre maxi de commentaires sur ce téléphone (3) atteint)</small>
+        {% endif %}
+
+    </div>
+
+
+    <div class="row">
+
+            <div class="col-5 bg-light p-3">
+        <h3>Les commentaires</h3>
+            </div>
+
+        <table class="table" style="border: solid #8959A8 1px ">
+        {% if commentaires %}
+            <thead class="thead-dark">
+            <tr>
+                <th>Utilisateur</th>
+                <th>Commentaires</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+                {% for commentaire in commentaires %}
+                    <tr>
+                        <td>{{ commentaire.nom }}  |  ID : ({{ commentaire.id_utilisateur }})</td>
+                        <td>{% if commentaire.utilisateur_id == 1 %}
+                            <span style="color: red">(réponse de l'administrateur du site (webmaster) ) :</span>
+                            {% endif %}
+                            {{ commentaire.commentaire }}</td>
+{#                        <td>{{ commentaire.note }}#}
+{#                        {{ commentaire.__dict__ }}#}
+{#                        </td>#}
+                        <td>
+                            {% if commentaire.id_utilisateur == session['id_user'] %}
+                                  <form  action="/client/commentaire/delete"  style="display: inline-block;"  method="post" >
+                                      <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                                      <input type="hidden" name="id_utilisateur" value="{{ commentaire.id_utilisateur }}">
+                                      <input type="hidden" name="date_publication" value="{{ commentaire.date_publication }}">
+                                      <button class="btn btn-primary" > Supprimer </button>
+                                  </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr class="table-warning"><td>Pas de commentaire</td><td></td></tr>
+            {% endif %}
+
+            </tbody>
+        </table>
+        <a class="btn btn-outline-primary btn-lg" href="/client/telephone/show">Retour vers la page d'accueil</a>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>afficher les modèles de telephone</title>
+{% endblock %}
+
+{% block body %}
+<h3>Déclinaison et/ou modèle (catégorie)</h3>
+<a class="btn btn-outline-success" href="/admin/modele/add">ajouter un modele</a>
+<br><br>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+           <th>designation</th> <th>(id_modele)</th><th>nombre de telephones</th><th>opération</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if modeles | length >= 1 %}
+        {% for ligne in modeles %}
+           <tr>
+                  <td>{{ ligne.libelle }}</td>
+                  <td>{{ ligne.id_modele }}</td>
+                   <td><span style="color: red">{{ ligne.nbr_telephones }}</span></td>
+                  <td>
+                      <a class="btn btn-outline-danger" href="/admin/modele/edit?id_modele={{ ligne.id_modele }}">editer</a>&nbsp;
+                      <a class="btn btn-outline-warning" href="/admin/modele/delete?id_modele={{ ligne.id_modele }}">supprimer</a>
+                  </td>
+           </tr>
+        {% endfor %}
+    {% else %}
+            <tr>
+                  <td>
+                      pas de modele
+                  </td>
+           </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

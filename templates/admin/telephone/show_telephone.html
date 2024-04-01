@@ -1,0 +1,93 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>Afficher les téléphones</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Articles</h3>
+    <a  class="btn btn-outline-success" href="/admin/telephone/add">Ajouter un article</a>
+    <br><br>
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Libellé</th>
+            <th>Modèle</th>
+            <th>Prix</th>
+            <th>Poids</th>
+            <th>Stockage</th>
+            <th>Stock</th>
+            <th>Nouveaux avis</th>
+            <th>Nombre de couleurs</th>
+            <th>Image</th>
+            <th>Opération</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if telephones | length >= 1 %}
+            {% for ligne in telephones %}
+                <tr>
+                    <td>{{ ligne.id_telephone }}</td>
+                    <td>{{ ligne.libelle_telephone }}</td>
+                    <td><span style="color: red">{{ ligne.libelle_modele }}</span> ({{ ligne.modele_id }})</td>
+                    <td>{{ ligne.prix_telephone }} €</td>
+                    <td>{{ ligne.poids_telephone }}</td>
+                    <td>{{ ligne.stockage_telephone }}</td>
+                    <td>
+                        {% if ligne.stock is defined %}
+                            {% if ligne.stock != None  %}
+                                {% if ligne.stock > 0 %}
+                                    <strong style="color: green">{{ ligne.stock }}</strong>
+                                    {% if ligne.min_stock is defined  and ligne.min_stock <= 0 %}
+                                        <span style="color: #fd7e14">(⚠️ Déclinaison(s) en rupture)</span>
+                                    {% endif %}
+                                {% else %}
+                                    <strong class="text-muted">Article momentanément indisponible</strong>
+                                {% endif %}
+                            {% else %}
+                                <strong class="text-muted">Déclinaison ND</strong>
+                            {% endif %}
+                        {% else %}
+                            ND
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if ligne.nb_commentaires_nouveaux is defined %}
+                            {% if ligne.nb_commentaires_nouveaux > 0 %}
+                                <a href="/admin/telephone/commentaires?id_telephone={{ ligne.id_telephone }}"><strong style="color: red">{{ ligne.nb_commentaires_nouveaux }} avis non lus ⚠️</strong></a>
+                            {% else %}
+                                <strong class="text-muted"></strong>
+                            {% endif %}
+                        {% else %}
+                            nb_avis ND
+                        {% endif %}
+                    </td>
+
+                    <td>{{ ligne.nb_couleurs }}</td>
+
+                    <td>{{ ligne.image_telephone }}
+                        {%  if ligne.image_telephone is not none %}
+                            <img style="width:40px;height:40px"  src="{{ url_for('static', filename = 'images/' + ligne.image_telephone) }}"  alt="Image de {{ ligne.libelle_telephone }}" >
+                        {% else %}
+                            <img style="width:40px;height:40px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="Pas d'image" >
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a  class="btn btn-outline-danger" href="/admin/telephone/delete?id_telephone={{ ligne.id_telephone }}" onclick="return confirm('Êtes-vous sûr ?')" >Supprimer</a>
+                        <a  class="btn btn-outline-warning" href="/admin/telephone/edit?id_telephone={{ ligne.id_telephone }}">Éditer</a>
+                        <a  class="btn btn-outline-warning" href="/admin/telephone/commentaires?id_telephone={{ ligne.id_telephone }}">Commentaires</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    Pas de téléphone
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

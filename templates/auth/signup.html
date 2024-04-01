@@ -1,0 +1,66 @@
+<!-- templates/signup.html -->
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/formulaire.css') }}" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/mes_styles.css') }}" >
+{% endblock %}
+
+
+{% block body %}
+
+    {% include('auth/_nav.html') %}
+
+<form method="post" action="/signup" >
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <br>
+            <div class="alert alert-warning">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+
+    <h1>Un compte. Depuis n'importe quel appareil. Inscrivez-vous pour commencer.</h1>
+
+    <div class="divInput">
+
+        <div class="form__group field">
+            <input type="text" value="" class="form__field" placeholder="Identifiant" name="login" id='inputLogin' required autofocus />
+            <label for="inputLogin" class="form__label">Identifiant</label>
+        </div>
+
+        <div class="form__group field">
+            <input type="text" value="" class="form__field" placeholder="Email" name="email" required />
+            <label for="inputPassword" class="form__label">Email</label>
+        </div>
+
+        <div class="form__group field">
+            <input type="password" value="" class="form__field" placeholder="Mot de passe" name="password" required />
+            <label for="inputPassword" class="form__label">Mot de passe</label>
+        </div>
+
+    </div>
+
+
+    <div class="button-container">
+    <button type="submit">
+        Suivant
+    </button>
+    </div>
+
+</form>
+
+    <footer>
+
+    <a href="#"><p>Conditions générales</p></a>
+    <a href="#"><p>Déclaration de confidentalité relative à Mait</p></a>
+    <a href="#"><p>Avis</p></a>
+    <a href="#"><p>Service client</p></a>
+    <a href="#"><p>Copyright © 2005-2024 Mait. All Rights Reserved.</p></a>
+
+    </footer>
+
+{% endblock %}
+

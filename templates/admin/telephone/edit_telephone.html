@@ -1,0 +1,99 @@
+{% extends 'admin/layout_admin.html' %}
+{% block title %}
+    <title>Modifier un téléphone</title>
+{% endblock %}
+
+{% block body %}
+    <h2>Modifier un téléphone</h2>
+    <div class="row mt-5">
+        <img class="card-img-top rounded mx-4 d-block" style="width: 200px; height: 200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename='images/' + telephone.image_telephone) }}" alt="Image de {{ telephone.libelle_telephone }}">
+        <div class="w-50">
+            <form method="post" action="/admin/telephone/edit" enctype="multipart/form-data">
+                <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                <label for="nom">Nom du téléphone :</label>
+                <input name="nom" type="text" value="{{ telephone.libelle_telephone }}" class="form-control" required>
+
+                <label for="poids">Poids (g) :</label>
+                <input name="poids" type="number" min="0" step="1" value="{{ telephone.poids_telephone }}" class="form-control" required>
+
+                <label for="stockage">Stockage (Go) :</label>
+                <input name="stockage" type="number" min="0" value="{{ telephone.stockage_telephone }}" class="form-control" required>
+
+                <label for="prix">Prix (€) :</label>
+                <input name="prix" type="number" min="0.0" step="1" max="2147483647" value="{{ telephone.prix_telephone }}" class="form-control" required>
+
+                <label for="autonomie">Autonomie (heures) :</label>
+                <input name="autonomie" type="number" min="0" step="1" value="{{ telephone.autonomie_telephone }}" class="form-control" required>
+
+                <label for="image">Image :</label>
+                <input name="image" type="file" onchange="loadFile(event)" class="form-control">
+
+                <label for="modele_id">Modèle de téléphone :</label>
+                <select name="modele_id" required class="form-select">
+                    <option value="">Sélectionner un modèle</option>
+                    {% for modele in modeles %}
+                        <option value="{{ modele.id_modele }}" {% if modele.id_modele == telephone.modele_id %}selected{% endif %}>{{ modele.libelle_modele }}</option>
+                    {% endfor %}
+                </select>
+
+
+                <label for="submit">
+                    <input name="submit" type="submit" value="Modifier" class="btn btn-primary mt-2">
+                </label>
+            </form>
+            <a href="/admin/telephone/show"><button class="btn btn-secondary mt-2">Annuler</button></a>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5">
+        <div style="display: flex; justify-content: space-between">
+            <h3>Les declinaisons de ce téléphone : </h3>
+            <a class="img-fluid" href="/admin/declinaison_telephone/add?id_telephone={{ telephone.id_telephone }}">
+                <button class="btn btn-primary">
+                    Ajouter une declinaison
+                </button>
+            </a>
+        </div>
+        <table class="table table-hover table-responsive">
+            <th style="width: 300px">Taille (ID)</th>
+            <th style="width: 300px">Couleur (ID)</th>
+            <th style="width: 300px">Stock</th>
+            <th style="width: 300px">Opérations</th>
+            {% if nb_couleurs == 0 %}
+                <tr>
+                    <td>Aucune couleur disponible pour ce téléphone</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                {% for declinaison in declinaisons %}
+                    {% if declinaison.stock is not none and declinaison.stock > 0 %}
+                        <tr>
+                            <td>
+                                {{ declinaison.libelle_taille }}
+                            </td>
+                            <td>
+                                {{ declinaison.libelle_couleur }}
+                            </td>
+                            <td>
+                                {{ declinaison.stock }}
+                            </td>
+                            <td style="display: flex">
+                                <a class="img-fluid" href="">
+                                    <button class="btn btn-primary mx-1">
+                                        supprimer
+                                    </button>
+                                </a>
+                                <a class="img-fluid" href="">
+                                    <button class="btn btn-primary mx-1">
+                                        editer
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}

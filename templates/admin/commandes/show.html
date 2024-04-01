@@ -1,0 +1,96 @@
+{% extends "admin/layout_admin.html" %}
+{% block body %}
+    <div class="container-fluid">
+        {% if telephones_commande %}
+            <h3>Récapitulatif de la commande sélectionnée</h3>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr><th>Téléphone</th><th>Quantité</th><th>Prix Unit.</th><th>Prix Total</th><th>Couleur</th><th>Taille</th></tr>
+                </thead>
+                <tbody>
+                {% for ligne in telephones_commande %}
+                    <tr>
+                        <td>{{ ligne.libelle_telephone }}</td>
+                        <td>{{ ligne.quantite }}</td>
+                        <td>{{ ligne.prix_unitaire }} €</td>
+                        <td>{{ ligne.prix_total }} €</td>
+                        <td style="color: {{ ligne.code_couleur }}">{{ ligne.libelle_couleur }}</td>
+                        <td>{{ ligne.libelle_taille }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <br>
+            <div style="color: brown">
+                <strong>Adresse de livraison : </strong>
+                {% set adresse_livraison = commande_adresses.adresse_livraison_nom ~ ', ' ~ commande_adresses.adresse_livraison_rue ~ ', ' ~ commande_adresses.adresse_livraison_cp ~ ' ' ~ commande_adresses.adresse_livraison_ville %}
+                {{ adresse_livraison }} | {{ commande_adresses.nom }}
+                <br>
+                <strong>Adresse de facturation : </strong>
+                {% set adresse_facturation = commande_adresses.adresse_facturation_nom ~ ', ' ~ commande_adresses.adresse_facturation_rue ~ ', ' ~ commande_adresses.adresse_facturation_cp ~ ' ' ~ commande_adresses.adresse_facturation_ville %}
+                {% if adresse_livraison == adresse_facturation %}
+                    Adresse identique
+                {% else %}
+                    {{ adresse_facturation }} | {{ commande_adresses.nom }}
+                {% endif %}
+            </div>
+
+            {% if telephones_commande[0].etat_id == 1 %}
+                <form action="/admin/commande/valider" style="display: inline-block;" method="post">
+                    <input type="hidden" name="id_commande"     value="{{ telephones_commande[0].id_commande }}">
+                    <button class="btn btn-primary" > Valider (Expédier) </button>
+                </form>
+            {% endif %}
+            <hr>
+        {% endif %}
+
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Toutes les commandes</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable">
+                        <thead>
+                        <tr>
+                            <th>login client</th>
+                            <th>Date de commande</th>
+                            <th>Nombre de telephones</th>
+                            <th>Coût total</th>
+                            <th>Etat de la commande</th>
+                            <th style="text-align: center;">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for commande in commandes %}
+                            <tr id="" {% if commande['Etat de la Commande'] == 'En attente de validation' %} class="table-warning" style="font-weight: bold;"{% endif %}>
+                                <td>{{ commande['Login Client'] }}</td>
+                                <td>{{ commande['Date de Commande'] }}</td>
+                                <td>{{ commande['Nombre de telephone'] }}</td>
+                                <td>{{ commande['Cout Total'] }}</td>
+                                <td>{{ commande['Etat de la Commande'] }}</td>
+                                <td style="text-align: center;">
+                                    {% if commande['Etat de la Commande'] == 'En attente de validation' %}
+                                        <form action="/admin/commande/valider" style="display: inline-block;" method="post">
+                                        <input type="hidden" name="id_commande" value="{{ commande['ID Commande'] }}">
+                                        <button class="btn btn-primary" > Valider (Expédier) </button>
+                                    {% endif %}
+                                    </form>
+                                    <a href="/admin/commande/show?id_commande={{ commande['ID Commande'] }}">
+                                        <button class="btn btn-primary" > Details </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

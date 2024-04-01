@@ -1,0 +1,426 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Overpass:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* ============================================================ */
+/* PARTIE CSS POUR L'AFFICHAGE DES ARTICLES SOUS FORME DE CARDS */
+/* ============================================================ */
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne suivante si nécessaire */
+    justify-content: space-around; /* Espacement autour de chaque carte */
+    align-items: stretch; /* Étire les éléments pour qu'ils aient la même hauteur */
+}
+
+.product-card {
+    width: 300px; /* Largeur de la carte */
+    border: 1px solid #ddd; /* Bordure de la carte */
+    border-radius: 8px; /* Bords arrondis */
+    overflow: hidden; /* Assure que rien ne dépasse de la carte */
+    text-align: center; /* Centre le contenu textuel */
+    margin: 10px; /* Espacement autour de la carte */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre sous la carte */
+}
+
+.product-image {
+    width: 100%; /* Assure que l'image couvre la largeur de la carte */
+    aspect-ratio: 1; /* Maintient l'image carrée */
+}
+
+.product-info {
+    padding: 10px;
+}
+
+.product-name, .product-price {
+    margin: 5px 0; /* Ajustez selon vos besoins */
+}
+
+.product-actions {
+    margin-top: 10px; /* Espacement au-dessus de la section actions */
+}
+
+.add-to-cart-btn {
+    background-color: transparent; /* Couleur de fond du bouton */
+    color: #b05050; /* Couleur du texte du bouton */
+    border: solid 2px #b05050;
+    padding: 10px 15px; /* Espacement à l'intérieur du bouton */
+    border-radius: 5px; /* Bords arrondis du bouton */
+    cursor: pointer; /* Curseur en forme de pointeur */
+    width: 60%; /* Le bouton occupe toute la largeur disponible */
+    box-sizing: border-box; /* Assure que padding et bordure sont inclus dans la largeur */
+    transition: background-color 0.3s; /* Transition pour l'effet au survol */
+}
+
+.add-to-cart-btn:hover {
+    background-color: #b05050; /* Couleur de fond du bouton au survol */
+    color: #ffffff; /* Couleur du texte du bouton */
+}
+
+.stock-info {
+    margin-top: 10px; /* Espacement au-dessus de l'info stock */
+    font-size: 0.9em; /* Taille de la police pour l'info stock */
+    color: #333; /* Couleur du texte pour l'info stock */
+}
+
+.inputPanier {
+    border-radius: 5px;
+    border: solid 1px black;
+    max-width: 20%;
+    margin-left: 5px;
+    padding: 10px; /* Espacement à l'intérieur du bouton */
+}
+
+/* ============================================================ */
+/* ============================================================ */
+/* ============================================================ */
+
+/* ============================================================ */
+/* ====== PARTIE CSS POUR LE PANIER AU DESSUS DES ARTICLES =====*/
+/* ============================================================ */
+
+#texteMontantTotal {
+    font-size: 20px;
+}
+
+.buttonPanier {
+    color: white;
+    border: transparent;
+    border-radius: 8px;
+    padding: 7px 30px;
+    background-color: #0071e3;
+    margin-right: 10px;
+}
+
+/* ============================================================ */
+/* ============== PARTIE CSS POUR LA NAVBAR =================== */
+/* ============================================================ */
+
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+    color: white;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+
+/*======================================================
+                          Navbar
+  ======================================================*/
+#navbar {
+    font-family: "Lato", sans-serif;
+  background: rgba(0, 0, 0);
+  color: rgb(13, 26, 38);
+  top: 0;
+  height: 60px;
+  line-height: 60px;
+  width: 100vw;
+  z-index: 10;
+}
+
+.nav-wrapper {
+  margin: auto;
+  text-align: center;
+  width: 70%;
+} @media(max-width: 768px) {
+    .nav-wrapper {
+      width: 90%;
+    }
+  } @media(max-width: 638px) {
+      .nav-wrapper {
+        width: 100%;
+      }
+    }
+
+
+.logo {
+  float: left;
+  margin-left: 28px;
+  height: 60px;
+}
+
+#MaitSmartphonesText {
+    color: white;
+    margin-left: 14px;
+    font-family: "Overpass", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+}
+
+#imageLogoNavBar {
+    height: 22px;
+    width: auto;
+}
+
+#navbar ul {
+  display: inline-block;
+  float: right;
+  list-style: none;
+  /* margin-right: 14px; */
+  margin-top: -2px;
+  text-align: right;
+  transition: transform 0.5s ease-out;
+  -webkit-transition: transform 0.5s ease-out;
+} @media(max-width: 640px) {
+    #navbar ul {
+      display: none;
+    }
+  } @media(orientation: landscape) {
+      #navbar ul {
+        display: inline-block;
+      }
+    }
+
+#navbar li {
+  display: inline-block;
+}
+
+#navbar li a {
+  color: rgb(211, 211, 211);
+  display: block;
+  font-size: 0.8em;
+  height: 60px;
+  letter-spacing: 1px;
+  margin: 0 20px;
+  padding: 0 4px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+}
+
+#navbar li a:hover {
+  /* border-bottom: 1px solid rgb(28, 121, 184); */
+  color: rgb(255, 255, 255);
+  transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+}
+
+/* Animated Bottom Line */
+#navbar li a:before, #navbar li a:after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 1px;
+  bottom: -1px;
+  background: rgb(13, 26, 38);
+}
+
+#navbar li a:before {
+  left: 0;
+  transition: 0.5s;
+}
+
+#navbar li a:after {
+  background: rgb(255, 255, 255);
+  right: 0;
+  /* transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1); */
+}
+
+#navbar li a:hover:before {
+  background: rgb(255, 255, 255);
+  width: 100%;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+#navbar li a:hover:after {
+  background: transparent;
+  width: 100%;
+  /* transition: 0s; */
+}
+
+#imageBDD {
+    filter: invert(100%);
+    max-height: 20px;
+    margin-right: 12px;
+    margin-left: 50px;
+}
+
+/* ============================================================ */
+/* ============ PARTIE CSS POUR LA PAGE D'ACCUEIL ============= */
+/* ============================================================ */
+
+.background-image {
+    position: relative; /* Changez absolute en relative */
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image1 {
+    background-image: url('../../images/fondtelephonenumeroUN.png');
+    background-size: 100% auto;
+    height: 681px;
+}
+
+.image2 {
+    background-image: url('../../images/telephonefondDEUX.png');
+    background-size: 100% auto;
+    height: 715px;
+}
+
+.image3 {
+    background-image: url('../../images/telephonefondTROIS.png');
+    background-size: 100% auto;
+    height: 570px;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    background-color: #f1f1f1; /* Couleur de fond du footer, à ajuster */
+    border-top: 1px solid #e7e7e7; /* Bordure en haut du footer, à ajuster */
+    padding: 20px;
+    text-align: center;
+}
+
+#hrFooter {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.repriseTexte {
+    color: #737373;
+    font-size: 12px;
+    text-align: left;
+    margin: 0 auto;
+    text-justify: inter-word;
+    max-width: 1100px;
+    padding: 20px;
+}
+
+.lienFooter {
+    color: #0a58ca;
+}
+
+.lienFooter2 {
+    color: #545454;
+}
+
+#partieTableauFooter {
+    font-size: 12px;
+    flex-direction: row;
+     text-align: center;
+}
+
+.texteJustifie {
+     display: inline-block;
+    font-size: 12px;
+    text-align: justify;
+    max-width: 1100px;
+    padding: 5px;
+    margin-right: 60px;
+}
+
+.pageAccTitrePrinc2 {
+    text-align: center;
+    font-size: 60px;
+    margin-top: 80px;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 600;
+}
+
+.sousTirePageAcc2 {
+    text-align: center;
+    font-size: 30px;
+    font-family: "Exo 2", sans-serif;
+}
+
+.pageAccTitrePrinc1 {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    margin-top: 50px;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 600;
+}
+
+.sousTirePageAcc1 {
+     color: white;
+    text-align: center;
+    font-size: 25px;
+    font-family: "Exo 2", sans-serif;
+}
+
+.enSavoirPlusBanderoleBas1 {
+    position: absolute;
+    margin-left: 20%;
+    font-size: 18px;
+    margin-top: 140px;
+}
+
+.enSavoirPlusBanderoleBas2 {
+    text-align: right;
+    margin-right: 20%;
+    font-size: 18px;
+    color: black;
+}
+
+.enSavoirPlus2 {
+    text-align: center;
+    font-size: 22px;
+    color: #0a58ca;
+}
+
+.titreBanderoleBas1 {
+    position: absolute;
+    margin-left: 18%;
+    color: white;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 600;
+    margin-top: 50px;
+}
+
+.titreBanderoleBas2 {
+    text-align: right;
+    margin-right: 18%;
+    margin-top: 50px;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 600;
+}
+
+.sousTitreBanderoleBas1 {
+    position: absolute;
+    margin-top: 110px;
+    margin-left: 15%;
+    color: white;
+    font-family: "Exo 2", sans-serif;
+    font-size: 20px;
+}
+
+.sousTitreBanderoleBas2 {
+    text-align: right;
+    margin-right: 19%;
+    color: black;
+    font-family: "Exo 2", sans-serif;
+    font-size: 20px;
+}
+
+
+/* ============================================================ */
+/* ============ PARTIE CSS POUR LES FORMULAIRES =============== */
+/* ============================================================ */
+
+

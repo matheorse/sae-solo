@@ -1,0 +1,60 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>Ajouter un téléphone</title>
+{% endblock %}
+
+{% block body %}
+    <h2>Ajouter un téléphone</h2>
+    <div class="row mt-5">
+        <img class="card-img-top rounded mx-4 d-block" style="width: 200px; height: 200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename='images/no_photo.jpeg') }}" alt="">
+        <div class="w-50">
+            <form method="post" action="/admin/telephone/add" enctype="multipart/form-data">
+                <label for="libelle">Nom du téléphone :</label>
+                <input name="libelle" type="text" value="" class="form-control" required>
+
+                <label for="stock">Stock :</label>
+                <input name="stock" type="number" min="0" value="" class="form-control" required>
+
+                <label for="poids">Poids (g) :</label>
+                <input name="poids" type="number" min="0" step="1" value="" class="form-control" required>
+
+                <label for="taille">Taille (pouces) :</label>
+                <input name="taille" type="number" min="0" step="1" value="" class="form-control" required>
+
+                <label for="stockage">Stockage (Go) :</label>
+                <input name="stockage" type="number" min="0" value="" class="form-control" required>
+
+                <label for="prix">Prix (€) :</label>
+                <input name="prix" type="number" min="0.0" step="1" max="2147483647" value="" class="form-control" required>
+
+                <label for="autonomie">Autonomie (heures) :</label>
+                <input name="autonomie" type="number" min="0" step="1" value="" class="form-control" required>
+
+                <label for="image">Image :</label>
+                <input name="image" type="file" onchange="loadFile(event)" class="form-control">
+
+                <label for="modele_id">Modèle de téléphone :</label>
+                <select name="modele_id" required class="form-select">
+                    <option value="">Sélectionner un modèle</option>
+                    {% for modele in modeles %}
+                        <option value="{{ modele.id_modele }}">{{ modele.libelle_modele }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="couleur_id">Couleur:</label>
+                <select name="couleur_id" required class="form-select">
+                    <option value="">Sélectionner une couleur</option>
+                    {% for couleur in couleurs %}
+                        <option value="{{ couleur.id_couleur }}">{{ couleur.libelle_couleur }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="submit">
+                    <input name="submit" type="submit" value="Ajouter" class="btn btn-primary mt-2">
+                </label>
+            </form>
+            <a href="/admin/telephone/show"><button class="btn btn-secondary mt-2">Annuler</button></a>
+        </div>
+    </div>
+{% endblock %}

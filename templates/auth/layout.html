@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Mait (France)</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" >
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.css') }}" >
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/mes_styles.css') }}" >
+    {% endblock %}
+</head>
+<body>
+
+<div class="content">
+    {% include('auth/_nav.html') %}
+    <div class="background-image image1">
+        <h1 class="pageAccTitrePrinc1">Mait Ace 15 Pro</h1>
+        <p class="sousTirePageAcc1"> Redéfinissez votre expérience. Adoptez la performance.</p>
+        <a href="/login"><p class="enSavoirPlus2">En savoir plus > ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  Acheter ></p></a>
+    </div>
+
+    <div class="background-image image2">
+        <h1 class="pageAccTitrePrinc2">Mait Ace 15 </h1>
+        <p class="sousTirePageAcc2"> Design réinventé. Conçu pour l'excellence.</p>
+        <a href="/login"><p class="enSavoirPlus2">En savoir plus > ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  Acheter ></p></a>
+    </div>
+
+    <div class="background-image image3">
+
+            <h1 class="titreBanderoleBas1">MaitBook Pro</h1>
+            <p class="sousTitreBanderoleBas1">Boosté par les puces A2 Pro et A2 Max.<p>
+            <a href="/login"><p class="enSavoirPlusBanderoleBas1">Bientôt disponible.</p></a>
+
+            <h1 class="titreBanderoleBas2">MaitFitness+</h1>
+            <p class="sousTitreBanderoleBas2">Vivez plus fort, plus loin.<p>
+
+    </div>
+</div>
+
+
+{% include('auth/_footer.html') %}
+
+
+{% block javascripts %}
+<script src="{{ url_for('static', filename='assets/js/bootstrap.bundle.js') }}" ></script>
+{% endblock %}
+
+</body>
+
+</html>

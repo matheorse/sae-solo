@@ -1,0 +1,141 @@
+{#  telephones_panier  : tableau de dictionnaires
+        * dictionnaire : nom quantite prix article_id [stock]
+        *
+#}
+
+{% extends "client/layout_client.html" %}
+{% block body %}
+    <div class="container">
+        <div class="row align-self-right">
+            {% include('client/boutique/_panier.html') %}
+            <div class="col">
+                <h3>Les filtres</h3>
+                telephones dont le nom est composé par :<br>
+                {% include('client/boutique/_filtre.html') %}
+            </div>
+        </div>
+
+            <br> <br>
+            <h1>Nos modèles</h1>
+            <br>
+
+        <div class="products-container">
+            {% for telephone in telephones %}
+                <div class="product-card">
+
+                    {%  if telephone.image_telephone is not none %}
+                        <a href="/client/telephone/details?id_telephone={{ telephone.id_telephone }}">
+                        <img src="{{ url_for('static', filename = 'images/')}}{{ telephone.image_telephone }}"  alt="image  de {{ telephone.libelle_telephone }}" class="product-image">
+                        </a>
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image de {{ telephone.libelle_telephone }}" class="product-image">
+                    {% endif %}
+
+                    <div class="product-info">
+                        <h5 class="product-name">{{ telephone.libelle_telephone }}</h5>
+                        <p class="product-price">À partir de {{ telephone.prix_telephone }}€</p>
+                        <p>stock restant: {{ telephone.stock }}</p>
+                        {% if telephone.nb_declinaisons %}
+                            <p>{{ telephone.nb_declinaisons }} déclinaisons disponibles</p>
+                        {% else %}
+                            <p>Déclinaisons non disponibles</p>
+                        {% endif %}
+
+
+                    </div>
+
+                   <div class="product-actions">
+                        <form action="/client/panier/add" method="post">
+                            <button type="submit" class="add-to-cart-btn">Ajouter au panier</button>
+                            <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                            <input class="inputPanier" type="number" name="quantite" min="1" value="1" required>
+                        </form>
+                   </div>
+
+
+                </div>
+            {% endfor %}
+        </div>
+
+
+
+        <!--
+
+        <div class="row">
+            {% for telephone in telephones  %}
+                <div class="card col-4 mt-4 p-1">
+                    <div class="card-body border-dark rounded p-1">
+                        <a href="/client/telephone/details?id_telephone={{ telephone.id_telephone }}" >
+                            <h3 class="card-title">
+                                <span style="color: #000000">{{ telephone.libelle_telephone }}</span><br>
+                                <span style="color: rgba(0,0,0,0.71)">{{ telephone.prix_telephone }}€</span>
+                            </h3>
+                            {%  if telephone.image_telephone is not none %}
+                                <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/')}}{{ telephone.image_telephone }}"  alt="image  de {{ telephone.libelle_telephone }}" >
+                            {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ telephone.libelle_telephone }}" >
+                            {% endif %}
+                            <hr>
+                        </a>
+
+                        <div class="row">
+
+                            {% if telephone.stock is defined and telephone.stock is not none and telephone.stock > 0 %}
+                             <form action="/client/panier/add" method="post">
+                                <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
+                                <input type="number" name="quantite" min="1" value="1" required>
+                                <button type="submit" class="btn btn-success">
+                                    Ajouter au panier
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            <div class="col-2 align-content-end">
+                                {% if telephone.liste_envie is defined %}
+                                    {%if  telephone.liste_envie== 1%}
+                                        <a href="/client/envie/add?id_telephone={{ telephone.id_telephone }}" style="text-decoration: none">💛</a>
+                                    {% else %}
+                                        <a href="/client/envie/add?id_telephone={{ telephone.id_telephone }}" style="text-decoration: none">🤍</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        {% if telephone.stock is defined and telephone.stock != None %}
+                            {% if telephone.stock > 0 %}
+                                <small class="text-muted">Stock restant : {{ telephone.stock }}</small>
+                            {% else %}
+                                <small class="text-muted">Modèle momentanément indisponible</small>
+                            {% endif %}
+
+                            {% if telephone.nb_couleur is defined and telephone.nb_couleur != None %}
+                                ({{ telephone.nb_couleur }} d.)
+                            {% endif %}
+
+                            <br>
+
+                        {% endif %}
+                        {% if telephone.nb_notes is defined %}
+                            {% if telephone.nb_notes > 0 %}
+                                <a  href="/client/telephone/details?id_telephone={{ telephone.id_telephone }}" >
+                                    <span style="color: #3A7734"> note : {{  "{:,.1f}".format(telephone.moy_notes) }}({{ telephone.nb_notes }})</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                        {% if telephone.nb_avis is defined %}
+                            {% if telephone.nb_avis > 0 %}
+                                <a href="/client/telephone/details?id_telephone={{ telephone.id_telephone }}" >
+                                    <span style="color: #3A7734">({{ telephone.nb_avis }} avis)</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div> -->
+
+    </div>
+    {#    {{ telephones | pprint }}#}
+{% endblock %}
