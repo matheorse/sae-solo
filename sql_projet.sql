@@ -114,6 +114,7 @@ INSERT INTO etat(libelle_etat) VALUES
 ('En attente de validation');
 
 INSERT INTO couleur(libelle_couleur) VALUES
+('couleur unique'),
 ('Noir'),
 ('Blanc'),
 ('Jaune'),
@@ -154,6 +155,7 @@ INSERT INTO telephone (libelle_telephone, poids_telephone, stockage_telephone, p
 
 -- Insertion de données pour la table `taille`
 INSERT INTO taille(libelle_taille) VALUES
+('Taille unique'),
 ('Petit'),
 ('Moyen'),
 ('Grand');

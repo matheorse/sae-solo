@@ -1,25 +1,25 @@
 {% extends 'admin/layout_admin.html' %}
 
 {% block title %}
-    <title>modifier un modèle</title>
+<title>Modifier un modèle</title>
 {% endblock %}
 
 {% block body %}
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
-  <form method="post" action="/admin/modele/edit">
-    <fieldset>
-        <legend> Modifier un modèle</legend>
-        <div class="mb-3">
-        <input type="hidden" name="id_modele" size="18" value="{{ modele.id_modele }}" id="id">
-        <label for="libelle">libellé</label><br>
-
-        <input class="form-select" type="text" name="libelle" size="18" value="{{ modele.libelle_modele }}" id="libelle"><br>
-        </div>
-        <div class="col-12">
-        <button class="btn btn-primary" type="submit">Valider</button>
-        </div>
-    </fieldset>
-  </form>
+<h2>Modifier un modèle</h2>
+{% if error %}
+<p class="error"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+<form method="post" action="/admin/modele/edit">
+  <fieldset>
+    <legend>Modifier un modèle</legend>
+    <div class="mb-3">
+      <input type="hidden" name="id_modele" value="{{ modele.id_modele }}" id="id">
+      <label for="libelle">Libellé</label><br>
+      <input class="form-select" type="text" name="libelle" size="18" value="{{ modele.libelle_modele }}" id="libelle"><br>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Valider</button>
+    </div>
+  </fieldset>
+</form>
 {% endblock %}

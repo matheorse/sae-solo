@@ -11,10 +11,12 @@ admin_modele = Blueprint('admin_modele', __name__,
 @admin_modele.route('/admin/modele/show')
 def show_modele():
     mycursor = get_db().cursor()
-    # sql = '''         '''
-    # mycursor.execute(sql)
-    # modeles = mycursor.fetchall()
-    modeles=[]
+    sql = '''SELECT modele.*, COUNT(telephone.id_telephone) AS nbr_telephones
+             FROM modele
+             LEFT JOIN telephone ON modele.id_modele = telephone.modele_id
+             GROUP BY modele.id_modele'''
+    mycursor.execute(sql)
+    modeles = mycursor.fetchall()
     return render_template('admin/modele/show_modele.html', modeles=modeles)
 
 @admin_modele.route('/admin/modele/add', methods=['GET'])
@@ -26,7 +28,7 @@ def valid_add_modele():
     libelle = request.form.get('libelle', '')
     tuple_insert = (libelle,)
     mycursor = get_db().cursor()
-    sql = '''         '''
+    sql = ''' INSERT INTO modele (libelle_modele) VALUES (%s)        '''
     mycursor.execute(sql, tuple_insert)
     get_db().commit()
     message = u'modele ajouté , libellé :'+libelle
@@ -38,14 +40,27 @@ def delete_modele():
     id_modele = request.args.get('id_modele', '')
     mycursor = get_db().cursor()
 
-    flash(u'suppression modele , id : ' + id_modele, 'alert-success')
+    # Vérifier s'il existe des téléphones liés à ce modèle
+    sql_check = '''SELECT COUNT(*) FROM telephone WHERE modele_id = %s'''
+    mycursor.execute(sql_check, (id_modele,))
+    count = mycursor.fetchone()[0]
+
+    if count > 0:
+        flash(u'Impossible de supprimer ce modèle car il est utilisé par des téléphones.', 'alert-warning')
+    else:
+        # Supprimer le modèle
+        sql_delete = '''DELETE FROM modele WHERE id_modele = %s'''
+        mycursor.execute(sql_delete, (id_modele,))
+        get_db().commit()
+        flash(u'Modèle supprimé avec succès, id: ' + id_modele, 'alert-success')
+
     return redirect('/admin/modele/show')
 
 @admin_modele.route('/admin/modele/edit', methods=['GET'])
 def edit_modele():
     id_modele = request.args.get('id_modele', '')
     mycursor = get_db().cursor()
-    sql = '''   '''
+    sql = '''SELECT * FROM modele WHERE id_modele = %s'''
     mycursor.execute(sql, (id_modele,))
     modele = mycursor.fetchone()
     return render_template('admin/modele/edit_modele.html', modele=modele)
@@ -56,10 +71,10 @@ def valid_edit_modele():
     id_modele = request.form.get('id_modele', '')
     tuple_update = (libelle, id_modele)
     mycursor = get_db().cursor()
-    sql = '''   '''
+    sql = '''UPDATE modele SET libelle_modele = %s WHERE id_modele = %s'''
     mycursor.execute(sql, tuple_update)
     get_db().commit()
-    flash(u'modele modifié, id: ' + id_modele + " libelle : " + libelle, 'alert-success')
+    flash(u'Modèle modifié, id: ' + id_modele + ", libellé: " + libelle, 'alert-success')
     return redirect('/admin/modele/show')
 
 
