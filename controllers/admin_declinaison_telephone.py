@@ -15,7 +15,7 @@ def add_declinaison_telephone():
     id_telephone = request.args.get('id_telephone')
     sql = '''SELECT * FROM telephone
              WHERE id_telephone = %s;'''
-    mycursor.execute(sql, (id_telephone, ))
+    mycursor.execute(sql, (id_telephone,))
     telephone = mycursor.fetchone()
     sql = '''SELECT id_couleur, libelle_couleur FROM couleur'''
     mycursor.execute(sql)
@@ -23,14 +23,25 @@ def add_declinaison_telephone():
     sql = '''SELECT id_taille, libelle_taille FROM taille'''
     mycursor.execute(sql)
     tailles = mycursor.fetchall()
-    sql = '''SELECT id_taille FROM taille;'''
-    mycursor.execute(sql)
+    sql = '''SELECT taille_id, id_declinaison_telephone FROM declinaison
+             WHERE telephone_id = %s'''
+    mycursor.execute(sql, (id_telephone,))
     d_taille_uniq = mycursor.fetchone()
-    sql = '''SELECT id_couleur FROM couleur;'''
-    mycursor.execute(sql)
+    if d_taille_uniq is not None:
+        tailles.pop(0)
+        taille_id = d_taille_uniq.get('taille_id')
+        if taille_id == 1:
+            d_taille_uniq = 1
+    sql = '''SELECT couleur_id, id_declinaison_telephone FROM declinaison
+             WHERE telephone_id = %s'''
+    mycursor.execute(sql, (id_telephone,))
     d_couleur_uniq = mycursor.fetchone()
-    return render_template('admin/telephone/add_declinaison.html', telephone = telephone, couleurs=couleurs, tailles=tailles, d_taille_uniq=d_taille_uniq, d_couleur_uniq=d_couleur_uniq)
-
+    if d_couleur_uniq is not None:
+        couleurs.pop(0)
+        couleur_id = d_couleur_uniq.get('couleur_id')
+        if couleur_id == 1:
+            d_couleur_uniq = 1
+    return render_template('admin/telephone/add_declinaison.html', telephone=telephone, couleurs=couleurs, tailles=tailles, d_taille_uniq=d_taille_uniq, d_couleur_uniq=d_couleur_uniq)
 
 @admin_declinaison_telephone.route('/admin/declinaison_telephone/add', methods=['POST'])
 def valid_add_declinaison_telephone():
