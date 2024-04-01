@@ -41,11 +41,11 @@ def delete_modele():
     mycursor = get_db().cursor()
 
     # Vérifier s'il existe des téléphones liés à ce modèle
-    sql_check = '''SELECT COUNT(*) FROM telephone WHERE modele_id = %s'''
+    sql_check = '''SELECT COUNT(*) AS count FROM telephone WHERE modele_id = %s'''
     mycursor.execute(sql_check, (id_modele,))
-    count = mycursor.fetchone()[0]
+    result = mycursor.fetchone()
 
-    if count > 0:
+    if result and result['count'] > 0:  # Utiliser l'alias 'count' pour accéder à la valeur
         flash(u'Impossible de supprimer ce modèle car il est utilisé par des téléphones.', 'alert-warning')
     else:
         # Supprimer le modèle
