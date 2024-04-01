@@ -20,7 +20,7 @@
             <th>Stockage</th>
             <th>Stock</th>
             <th>Nouveaux avis</th>
-            <th>Nombre de couleurs</th>
+            <th>Nombre de declinaisons</th>
             <th>Image</th>
             <th>Opération</th>
         </tr>
@@ -65,7 +65,7 @@
                         {% endif %}
                     </td>
 
-                    <td>{{ ligne.nb_couleurs }}</td>
+                    <td>{{ ligne.nb_declinaisons }}</td>
 
                     <td>{{ ligne.image_telephone }}
                         {%  if ligne.image_telephone is not none %}

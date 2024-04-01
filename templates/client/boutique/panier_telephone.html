@@ -10,7 +10,7 @@
             {% include('client/boutique/_panier.html') %}
             <div class="col">
                 <h3>Les filtres</h3>
-                telephones dont le nom est composé par :<br>
+                Telephones dont le nom est composé par :<br>
                 {% include('client/boutique/_filtre.html') %}
             </div>
         </div>
@@ -35,7 +35,7 @@
                         <h5 class="product-name">{{ telephone.libelle_telephone }}</h5>
                         <p class="product-price">À partir de {{ telephone.prix_telephone }}€</p>
                         <p>stock restant: {{ telephone.stock }}</p>
-                        {% if telephone.nb_declinaisons %}
+                        {% if telephone.nb_declinaisons > 0 %}
                             <p>{{ telephone.nb_declinaisons }} déclinaisons disponibles</p>
                         {% else %}
                             <p>Déclinaisons non disponibles</p>
@@ -48,7 +48,7 @@
                         <form action="/client/panier/add" method="post">
                             <button type="submit" class="add-to-cart-btn">Ajouter au panier</button>
                             <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
-                            <input class="inputPanier" type="number" name="quantite" min="1" value="1" required>
+                            <input class="inputPanier" type="number" name="quantite" min="0" value="1" max="{{ telephones.stock }}" required>
                         </form>
                    </div>
 
@@ -79,8 +79,8 @@
 
                         <div class="row">
 
-                            {% if telephone.stock is defined and telephone.stock is not none and telephone.stock > 0 %}
-                             <form action="/client/panier/add" method="post">
+                            {% if telephone.stock is defined and telephone.stock is not none and telephone.stock %}
+                            <form action="/client/panier/add" method="post">
                                 <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
                                 <input type="number" name="quantite" min="1" value="1" required>
                                 <button type="submit" class="btn btn-success">

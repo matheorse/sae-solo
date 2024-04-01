@@ -21,7 +21,7 @@ from flask import render_template
 @admin_telephone.route('/admin/telephone/show')
 def show_telephone():
     mycursor = get_db().cursor()
-    sql = '''SELECT t.id_telephone, t.libelle_telephone, t.prix_telephone, t.image_telephone, t.modele_id, m.libelle_modele, SUM(stock) AS stock, MIN(stock) AS min_stock
+    sql = '''SELECT t.id_telephone, t.libelle_telephone, t.prix_telephone, t.image_telephone, t.modele_id, m.libelle_modele, SUM(stock) AS stock, MIN(stock) AS min_stock, COUNT(d.id_declinaison_telephone) AS nb_declinaisons
                  FROM telephone t
                  LEFT JOIN declinaison d ON t.id_telephone = d.telephone_id
                  LEFT JOIN modele m ON t.modele_id = m.id_modele

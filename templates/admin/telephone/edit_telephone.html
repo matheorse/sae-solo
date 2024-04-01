@@ -6,7 +6,9 @@
 {% block body %}
     <h2>Modifier un téléphone</h2>
     <div class="row mt-5">
-        <img class="card-img-top rounded mx-4 d-block" style="width: 200px; height: 200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename='images/' + telephone.image_telephone) }}" alt="Image de {{ telephone.libelle_telephone }}">
+        {% if telephone %}
+            <img class="card-img-top rounded mx-4 d-block" style="width: 200px; height: 200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename='images/' + telephone.image_telephone) }}" alt="Image de {{ telephone.libelle_telephone }}">
+        {% endif %}
         <div class="w-50">
             <form method="post" action="/admin/telephone/edit" enctype="multipart/form-data">
                 <input type="hidden" name="id_telephone" value="{{ telephone.id_telephone }}">
@@ -79,7 +81,7 @@
                                 {{ declinaison.stock }}
                             </td>
                             <td style="display: flex">
-                                <a href="/admin/declinaison_telephone/delete?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}&id_telephone={{ telephone.id_telephone }}">
+                                <a href="/admin/declinaison_telephone/delete?id_declinaison_telephone={{ declinaison.id_declinaison_telephone }}&amp;id_telephone={{ telephone.id_telephone }}">
                                     <button class="btn btn-danger mx-1">
                                         Supprimer
                                     </button>

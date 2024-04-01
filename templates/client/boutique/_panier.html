@@ -11,7 +11,7 @@
             </tr>
             {% for item_panier in telephones_panier %}
                 <tr>
-                    <td>{{ item_panier.libelle_telephone }}</td>
+                    <td>{{ item_panier.libelle_telephone }} {{item_panier.libelle_couleur}}, {{item_panier.libelle_taille}}</td>
                     <td>{{ item_panier.quantite }}</td>
                     <td>{{ "{:,.2f} €".format(item_panier.prix_telephone) }}</td>
                     <td>{{ "{:,.2f} €".format(item_panier.prix_telephone * item_panier.quantite) }}</td>

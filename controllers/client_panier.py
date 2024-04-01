@@ -9,7 +9,7 @@ client_panier = Blueprint('client_panier', __name__, template_folder='templates'
 def client_panier_add():
     mycursor = get_db().cursor()
     utilisateur_id = session['id_user']
-    id_telephone = request.form.get('id_telephoneo')
+    id_telephone = request.form.get('id_telephone')
     quantite_panier = request.form.get('quantite')
     id_declinaison_telephone = request.form.get('id_declinaison_telephone')
 

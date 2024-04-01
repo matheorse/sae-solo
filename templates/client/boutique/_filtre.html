@@ -6,14 +6,16 @@
 
     {% if items_filtre is defined %}
         <div class="form-group">
-            <h4>Types</h4>
+            <h4>Types téléphones</h4>
             {% for type in items_filtre %}
-                <input type="checkbox" name="filter_types[]" value="{{ type.id_type_telephone }}"
-                        {% set id_item = type.id_type_telephone | string %}
+                <input type="checkbox" name="filter_types" value="{{ type.id_modele }}"
+                        {% set id_item = type.id_modele | string %}
                         {% if session['filter_types'] %}
-                            {{ ' checked ' if id_item in session['filter_types'] else '' }}
+                            {#                   {%  if idItem in session['filter_types'] %} checked  {% endif %} #}
+                            {{ ' checked ' if (id_item in session['filter_types']) else '' }}
                         {% endif %}
-                > {{ type.libelle_type_telephone }}
+                        {#                https://stackoverflow.com/questions/58433775/how-to-access-the-value-of-each-checkbox-in-a-table-with-flask#}
+>  {{ type.libelle_modele }}
                 <br/>
             {% endfor %}
         </div>

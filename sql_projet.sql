@@ -36,6 +36,7 @@ CREATE TABLE etat(
 CREATE TABLE couleur(
    id_couleur INT AUTO_INCREMENT,
    libelle_couleur VARCHAR(255),
+   code_couleur VARCHAR(255),
    PRIMARY KEY(id_couleur)
 ) DEFAULT CHARSET=utf8mb4;
 
@@ -61,6 +62,7 @@ CREATE TABLE telephone(
 CREATE TABLE declinaison (
     id_declinaison_telephone INT AUTO_INCREMENT,
     stock INT,
+    image VARCHAR(255),
     prix_declinaison DECIMAL(10,2),
     telephone_id INT,
     taille_id INT NOT NULL,
@@ -113,18 +115,18 @@ INSERT INTO etat(libelle_etat) VALUES
 ('Expédiée'),
 ('En attente de validation');
 
-INSERT INTO couleur(libelle_couleur) VALUES
-('couleur unique'),
-('Noir'),
-('Blanc'),
-('Jaune'),
-('Rouge'),
-('Cyan'),
-('Marron'),
-('Bleu'),
-('Mauve'),
-('Vert'),
-('Gris');
+INSERT INTO couleur(libelle_couleur, code_couleur) VALUES
+('couleur unique','#000000'),
+('Noir', '#000000'),
+('Blanc','#FFFFFF'),
+('Jaune','#FFDE59'),
+('Rouge','#E4080A'),
+('Cyan','#5DE2E7'),
+('Marron','#8D6F64'),
+('Bleu','#3A35CE'),
+('Mauve','#CC6CE7'),
+('Vert','#7DDA58'),
+('Gris','#CECECE');
 
 INSERT INTO modele(libelle_modele) VALUES
 ('Standard'),
@@ -161,13 +163,14 @@ INSERT INTO taille(libelle_taille) VALUES
 ('Grand');
 
 -- Exemple d'insertion pour la table `declinaison`
-INSERT INTO declinaison (stock, prix_declinaison, telephone_id, taille_id, couleur_id) VALUES
-(10, 1299.99, 1, 1, 1),
-(10, 1399.99, 1, 2, 1),
-(10, 1299.99, 1, 1, 2),
-(0, 1399.99, 2, 2, 2),
-(10, 1399.99, 2, 1, 2),
-(0, 1149.99, 3, 3, 3);
+INSERT INTO declinaison (stock, image, prix_declinaison, telephone_id, taille_id, couleur_id) VALUES
+(10,'titaneface.jpg', 1299.99, 1, 1, 1),
+(10,'Ace15Max_gris_face.jpg', 1399.99, 2, 2, 1),
+(10,'Ace15Max_gris_face.jpg', 1299.99, 2, 3, 1),
+(0,'Ace15noirface.jpg', 1399.99, 3, 2, 2),
+(10,'Ace15noirface.jpg', 1399.99, 4, 1, 2),
+(10,'Ace15noirface.jpg', 1399.99, 4, 1, 3),
+(0,'Ace15noirface.jpg', 1149.99, 3, 3, 3);
 
 -- Insertion de données pour la table `commande`
 INSERT INTO commande (date_achat_commande, utilisateur_id, etat_id, adresse_livraison, adresse_facturation) VALUES

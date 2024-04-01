@@ -32,16 +32,28 @@
                     {% endif %}
                     {% if item_couleur.stock is defined and item_couleur.stock != None %}
                         {% if item_couleur.stock > 0 %}
-                            <form  action="/client/panier/add"  method="post" class="col-2">
-                                 <input type="radio" name="id_declinaison_telephone" value="{{ item_couleur.id_couleur_telephone }}" required>
-                                    <small class="text-muted">Stock restant : {{ item_couleur.stock }}</small>
-                                 <div class="input-group">
-                                    <button class="btn  btn-success"  id="button-addon1">
-                                            <i class="bi bi-cart"></i>
-                                        <i class="fas fa-shopping-cart"></i>Ajouter
-                                    </button>
-                                        <input type="number" id="input-{{ item_couleur.id_declinaison_telephone }}" step="1" min="0" max="{{ item_couleur.stock }}" class="form-control col-2" value="1" name="quantite"  aria-describedby="button-addon1">
-                                 </div>
+                            <form action="/client/panier/add" method="post" class="col-2">
+                                {% for item_couleur in declinaisons %}
+                                    {% if item_couleur.stock is defined and item_couleur.stock > 0 %}
+                                        <input type="radio" name="id_declinaison_telephone" value="{{ item_couleur.id_declinaison_telephone }}" required>
+                                        <label>
+                                            <span style="color:{{ item_couleur.code_couleur }}">{{ item_couleur.libelle_couleur }}</span>
+                                            {% if item_couleur.libelle_taille %}
+                                                - Taille : {{ item_couleur.libelle_taille }}
+                                            {% endif %}
+                                            <small class="text-muted">Stock restant : {{ item_couleur.stock }}</small>
+                                        </label>
+                                        <div class="input-group">
+                                            <button class="btn btn-success" id="button-addon1">
+                                                <i class="fas fa-shopping-cart"></i> Ajouter
+                                            </button>
+                                            <input type="number" id="input-{{ item_couleur.id_declinaison_telephone }}" step="1" min="0" max="{{ item_couleur.stock }}" class="form-control col-2" value="1" name="quantite" aria-describedby="button-addon1">
+                                        </div>
+                                    {% else %}
+                                        <small class="text-muted">Téléphone momentanément indisponible</small>
+                                    {% endif %}
+                                    <hr class="col-5">
+                                {% endfor %}
                             </form>
                        {% else %}
                                  <small class="text-muted">telephone  momentanément indisponible</small>

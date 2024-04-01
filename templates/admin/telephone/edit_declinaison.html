@@ -1,61 +1,46 @@
 {% extends 'admin/layout_admin.html' %}
 {% block title %}
-    <title>modifier un exemplaire</title>
+    <title>Modifier une déclinaison</title>
 {% endblock %}
 
 {% block body %}
-    <h2>modifier la déclinaison d'un telephone </h2>
-        <div class="row mt-5">
-            telephone : <strong>{{ couleur.nom }}</strong><br>
-            {% if couleur.image_telephone is defined and couleur.image_telephone is not none %}
-            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"  src="{{ url_for('static', filename = 'images/')}}{{ couleur.image_telephone}}"  alt="image  de {{ couleur["libelle"] }}" >
+    <h2>Modifier la déclinaison d'un téléphone</h2>
+    <div class="row mt-5">
+        {% if telephone %}
+            Téléphone : <strong>{{ telephone.libelle_telephone }}</strong><br>
+            {% if telephone.image_telephone %}
+                <img class="card-img-top rounded mx-4 d-block" style="width:200px; height:200px; border: 1px solid black; padding: 25px;" src="{{ url_for('static', filename='images/') }}{{ telephone.image_telephone }}" alt="Image de {{ telephone.libelle_telephone }}">
             {% else %}
-            <i class="card-img-top rounded mx-4 d-block">pas de photo</i>{#{{ couleur|pprint }}#}
+                <i class="card-img-top rounded mx-4 d-block">Pas de photo</i>
             {% endif %}
+        {% else %}
+            <p>Téléphone non trouvé</p>
+        {% endif %}
 
-            <div class="w-25">
-                <form class="w-190" method="post" action="/admin/couleur/edit" enctype="multipart/form-data">
-                    <input type="hidden" value="{{ couleur.id_couleur }}" name="id_couleur">
-                    <input type="hidden" value="{{ couleur.telephone_id }}" name="id_telephone">
-                    <label for="stock">Stock :
-                        <input name="stock" type="number" min="0.0" step="0.01" value="{{ couleur.stock }}" class="form-control" >
-                    </label>
-                    {% if  d_taille_uniq is defined and  d_taille_uniq==1 %}
-                        <div>!</div><div><strong>Une taille unique est définie </strong></div>
-                        <div>il faut faut la supprimer pour modifier la taille</div>
-                        <input type="hidden" name="taille" value="1">
-                    {% else %}
-                    <label for="id_taille">taille :
-                        <select name="id_taille" class="form-select">
-                            {% for taille in tailles %}
-                                 <option value="{{ taille.id_taille }}"
-                                         {% if taille.id_taille == couleur.taille_id %} selected {% endif %}
-                                 > {{ taille.libelle }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    {% endif %}
-                    {% if  d_couleur_uniq is defined and  d_couleur_uniq==1 %}
-                        <div>!</div><div><strong>Une couleur unique est définie </strong></div>
-                          <div>il faut faut la supprimer pour modifier la couleur</div>
-                        <input type="hidden" name="couleur" value="1">
-                    {% else %}
-                    <label for="id_couleur"> couleur :
-                        <select name="id_couleur" class="form-select">
-                            {% for couleur in couleurs %}
-                                 <option value="{{ couleur.id_couleur }}"
-                                         {% if couleur.id_couleur == couleur.couleur_id %} selected {% endif %}
-                                 > {{ couleur.libelle }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    {% endif %}
-                    <br>
-                <label for="submit">
-                    <input name="submit" type="submit" value="Modifier" class="btn btn-primary mt-2">
+        <div class="w-25">
+            <form method="post" action="{{ url_for('admin_declinaison_telephone.valid_edit_declinaison_telephone') }}" enctype="multipart/form-data">
+                <input type="hidden" value="{{ declinaison_telephone.id_declinaison_telephone }}" name="id_declinaison_telephone">
+                <label for="stock">Stock:
+                    <input name="stock" type="number" min="0" value="{{ declinaison_telephone.stock }}" class="form-control">
                 </label>
-                </form>
-                <a href="/admin/telephone/edit?id_telephone={{ couleur.telephone_id }}"><button class="btn btn-secondary  mt-4">annuler</button></a>
-            </div>
+                <label for="taille">Taille:
+                    <select name="taille" class="form-select">
+                        {% for taille in tailles %}
+                        <option value="{{ taille.id_taille }}" {% if taille.id_taille == declinaison_telephone.taille_id %} selected {% endif %}>{{ taille.libelle_taille }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="couleur">Couleur:
+                    <select name="couleur" class="form-select">
+                        {% for couleur in couleurs %}
+                        <option value="{{ couleur.id_couleur }}" {% if couleur.id_couleur == declinaison_telephone.couleur_id %} selected {% endif %}>{{ couleur.libelle_couleur }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <br>
+                <input name="submit" type="submit" value="Modifier" class="btn btn-primary mt-2">
+            </form>
+            <a href="/admin/telephone/edit?id_telephone={{ declinaison_telephone.telephone_id }}"><button class="btn btn-secondary mt-4">Annuler</button></a>
         </div>
+    </div>
 {% endblock %}
