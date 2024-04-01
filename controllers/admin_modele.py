@@ -45,7 +45,7 @@ def delete_modele():
     mycursor.execute(sql_check, (id_modele,))
     result = mycursor.fetchone()
 
-    if result and result['count'] > 0:  # Utiliser l'alias 'count' pour accéder à la valeur
+    if result and result['count'] > 0:
         flash(u'Impossible de supprimer ce modèle car il est utilisé par des téléphones.', 'alert-warning')
     else:
         # Supprimer le modèle
