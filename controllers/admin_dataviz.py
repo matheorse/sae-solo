@@ -11,25 +11,33 @@ admin_dataviz = Blueprint('admin_dataviz', __name__,
 @admin_dataviz.route('/admin/dataviz/etat1')
 def show_modele_stock():
     mycursor = get_db().cursor()
+
+    # Requête SQL pour calculer le coût total du stock par type de casque
     sql = '''
-    
-           '''
-    # mycursor.execute(sql)
-    # datas_show = mycursor.fetchall()
-    # labels = [str(row['libelle']) for row in datas_show]
-    # values = [int(row['nbr_telephones']) for row in datas_show]
+        SELECT m.id_modele, m.libelle_modele,
+               COALESCE(SUM(d.stock * d.prix_declinaison), 0) AS cout_total
+        FROM modele m
+        LEFT JOIN telephone t ON m.id_modele = t.modele_id
+        LEFT JOIN declinaison d ON t.id_telephone = d.telephone_id
+        GROUP BY m.id_modele, m.libelle_modele;
+    '''
+    mycursor.execute(sql)
+    datas_show = mycursor.fetchall()
 
-    # sql = '''
-    #         
-    #        '''
-    datas_show=[]
-    labels=[]
-    values=[]
+    # Calcul du coût total de tous les stocks
+    cout_total_stock = sum(row['cout_total'] for row in datas_show)
 
-    return render_template('admin/dataviz/dataviz_etat_1.html'
-                           , datas_show=datas_show
-                           , labels=labels
-                           , values=values)
+    # Extraction des étiquettes (labels) et des valeurs (values) pour le graphique
+    labels = [row['libelle_modele'] for row in datas_show]
+    values = [float(row['cout_total']) for row in datas_show]
+
+    print("Data", datas_show)
+    print("Labels", labels)
+    print("Values", values)
+    print("Coût total du stock", cout_total_stock)
+
+    return render_template('admin/dataviz/dataviz_etat_1.html',
+                           datas_show=datas_show, labels=labels, values=values, cout_total_stock=cout_total_stock)
 
 
 # sujet 3 : adresses

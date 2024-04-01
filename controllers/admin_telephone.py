@@ -117,7 +117,7 @@ def delete_telephone():
     nb_couleurs = mycursor.fetchone()
 
     if nb_couleurs['nb_couleurs'] > 0:
-        message = u"Il y a des couleurs associées à ce téléphone : vous ne pouvez pas le supprimer"
+        message = u"Il y a des declinaisons associées à ce téléphone : vous ne pouvez pas le supprimer"
         flash(message, 'alert-warning')
     else:
         sql_get_image = '''SELECT image_telephone FROM telephone WHERE id_telephone = %s'''
