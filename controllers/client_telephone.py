@@ -9,7 +9,7 @@ client_telephone = Blueprint('client_telephone', __name__, template_folder='temp
 def client_telephone_show():
     mycursor = get_db().cursor()
 
-    # Modification de la requête pour agréger le stock par téléphone
+
     query = ('''
         SELECT telephone.id_telephone, telephone.libelle_telephone, telephone.poids_telephone, 
                telephone.stockage_telephone, telephone.prix_telephone, telephone.autonomie_telephone, 

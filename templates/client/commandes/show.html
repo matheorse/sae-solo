@@ -10,7 +10,7 @@
                 <tbody>
                 {% for ligne in telephones_commande %}
                     <tr>
-                        <td>{{ ligne.nom_declinaison }}
+                        <td>{{ ligne.nom }} ({{ligne.nb_declinaisons}}d)
                             <span style="color:#6dcea2">{{ ligne.libelle_couleur }}</span>
                             <span style="color:#d941c2">{{ ligne.libelle_taille }}</span>
                         </td>
@@ -64,7 +64,7 @@
                         {% for commande in commandes %}
                             <tr id="" {% if commande.etat_id == 1 %} style="background: #FFD600; font-weight: bold;" {% endif %}>
                                 <td>{{ commande.date_achat_commande }}</td>
-                                <td>{{ commande.nbre_declinaisons }}</td> <!-- Mettre à jour cette ligne -->
+                                <td>{{ commande.nbr_declinaisons }}</td>
                                 <td>{{ commande.Cout_Total }} €</td>
                                 <td style="text-align: center;">
                                     {% if commande.etat_id == 2 %}

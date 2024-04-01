@@ -71,33 +71,35 @@ def client_commande_add():
 def client_commande_show():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    sql = '''SELECT id_commande, etat_id, date_achat_commande, SUM(ligne_commande.quantite) AS nbr_telephones, SUM(ligne_commande.prix * ligne_commande.quantite) AS prix_total, etat.libelle_etat
-             FROM commande
-             LEFT JOIN ligne_commande ON commande.id_commande = ligne_commande.commande_id
-             LEFT JOIN etat ON commande.etat_id = etat.id_etat
-             WHERE utilisateur_id = %s
-             GROUP BY id_commande, etat_id, date_achat_commande, etat.libelle_etat   
-             ORDER BY etat_id, date_achat_commande DESC;'''
-    mycursor.execute(sql, (id_client, ))
+    sql_commandes = '''SELECT id_commande, etat_id, date_achat_commande, 
+                              SUM(ligne_commande.quantite) AS nbr_declinaisons, 
+                              SUM(ligne_commande.prix * ligne_commande.quantite) AS prix_total, 
+                              etat.libelle_etat
+                       FROM commande
+                       JOIN ligne_commande ON commande.id_commande = ligne_commande.commande_id
+                       JOIN etat ON commande.etat_id = etat.id_etat
+                       WHERE utilisateur_id = %s
+                       GROUP BY id_commande, etat_id, date_achat_commande, etat.libelle_etat   
+                       ORDER BY etat_id, date_achat_commande DESC;'''
+    mycursor.execute(sql_commandes, (id_client,))
     commandes = mycursor.fetchall()
 
     telephones_commande = None
     commande_adresses = None
     id_commande = request.args.get('id_commande', None)
-    if id_commande is not None:
-        print(id_commande)
-        sql = '''SELECT libelle_telephone AS nom, quantite, SUM(prix * quantite) AS prix_total, 
-                 prix AS prix_telephone, (SELECT COUNT(d.id_declinaison_telephone) FROM declinaison WHERE telephone_id = t.id_telephone) AS nb_declinaisons,
-                 libelle_couleur, libelle_taille
-                 FROM ligne_commande lc
-                 LEFT JOIN declinaison d ON lc.declinaison_id = d.id_declinaison_telephone
-                 LEFT JOIN telephone t ON d.telephone_id = t.id_telephone
-                 LEFT JOIN couleur c ON d.couleur_id = c.id_couleur
-                 LEFT JOIN taille t ON d.taille_id = t.id_taille
-                 WHERE commande_id = %s 
-                 GROUP BY libelle_telephone, id_telephone, quantite, prix, libelle_couleur, libelle_taille;'''
-        mycursor.execute(sql, (id_commande,))
+    if id_commande:
+        sql_telephones = '''SELECT t.libelle_telephone AS nom, lc.quantite, 
+                                   lc.prix AS prix_unitaire, 
+                                   (lc.prix * lc.quantite) AS prix_total,
+                                   c.libelle_couleur, ta.libelle_taille,
+                                   (SELECT COUNT(*) FROM declinaison d2 WHERE d2.telephone_id = t.id_telephone) AS nb_declinaisons
+                            FROM ligne_commande lc
+                            JOIN declinaison d ON lc.declinaison_id = d.id_declinaison_telephone
+                            JOIN telephone t ON d.telephone_id = t.id_telephone
+                            JOIN couleur c ON d.couleur_id = c.id_couleur
+                            JOIN taille ta ON d.taille_id = ta.id_taille
+                            WHERE lc.commande_id = %s;'''
+        mycursor.execute(sql_telephones, (id_commande,))
         telephones_commande = mycursor.fetchall()
-        print(telephones_commande)
 
-    return render_template('client/commandes/show.html', commandes=commandes, telephones_commande = telephones_commande, commande_adresses=commande_adresses)
+    return render_template('client/commandes/show.html', commandes=commandes, telephones_commande=telephones_commande, commande_adresses=commande_adresses)
